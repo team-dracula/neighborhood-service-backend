@@ -11,17 +11,18 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(express.static(path.join(__dirname, '/../client/dist')));
 
-// app.get('/items', (req, res) => {
-//     Models.retrieveAll(req, res);
-// })
+app.get('/items', (req, res) => {
+  Models.psqlRetrieveAll(req, res);
+});
 
 app.get('/items/:id', (req, res) => {
   Models.psqlRetrieveOne(req, res);
 });
 
-app.get('/items', (req, res) => {
-  Models.psqlRetrieveAll(req, res);
-});
+// app.get('/items', (req, res) => {
+//     Models.retrieveAll(req, res);
+// })
+
 
 // app.get('/items/:id', (req, res) => {
 //   Models.retrieveOne(req, res);
