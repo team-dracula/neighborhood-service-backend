@@ -63,19 +63,30 @@ var psqlRetrieveAll = (req, res) => {
 }
 
 var psqlRetrieveOne = (req, res) => {
-    let db = new sqlite3.Database(__dirname + '/../properties.db', (err) => {
-        if (err) {
-            console.log('error db', err);
-        } else {
-            db.all("SELECT * FROM regoProperties WHERE uniqueId = " + req.params.id, [], (err, property) => {
-                if (err) {
-                    console.log(err);
-                } else {
-                    res.send(property);
-                }
-            })
-        }
-    })
+    
+    var getOne = 'SELECT * FROM neighborhood WHERE id = ' + req.params.id;
+
+    pool.query(getOne)
+        .then((data) => {
+            res.send(data.rows)
+        })
+        .catch((err) => {
+            console.log(err);
+            pool.end();
+          }); 
+    // let db = new sqlite3.Database(__dirname + '/../properties.db', (err) => {
+    //     if (err) {
+    //         console.log('error db', err);
+    //     } else {
+    //         db.all(getOne + req.params.id, [], (err, property) => {
+    //             if (err) {
+    //                 console.log(err);
+    //             } else {
+    //                 res.send(property);
+    //             }
+    //         })
+    //     }
+    // })
 }
 
 

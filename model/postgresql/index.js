@@ -19,7 +19,7 @@ var count = 0;
 
 var loop = function(popRawData) {
   count++
-  if ( count >= 10000 ) {
+  if ( count >= 10001 ) {
     return
   } else {
     csvWriter  

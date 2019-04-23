@@ -14,18 +14,20 @@ app.use(express.static(path.join(__dirname, '/../client/dist')));
 // app.get('/items', (req, res) => {
 //     Models.retrieveAll(req, res);
 // })
- 
-app.get('/items', (req, res) => {
-  Models.psqlRetrieveAll(req, res);
-})
 
 app.get('/items/:id', (req, res) => {
-  Models.retrieveOne(req, res);
-})
+  Models.psqlRetrieveOne(req, res);
+});
+
+app.get('/items', (req, res) => {
+  Models.psqlRetrieveAll(req, res);
+});
 
 // app.get('/items/:id', (req, res) => {
-//   Models.psqlRetrieveOne(req, res);
+//   Models.retrieveOne(req, res);
 // })
+
+
 
 app.listen(port, () => {
   console.log(`server running at: http://localhost:${port}`);

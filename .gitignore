@@ -1,2 +1,5 @@
 config.js
 node_modules
+*.csv
+data/*.csv
+data/assets/*.csv
