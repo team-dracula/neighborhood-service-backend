@@ -1,13 +1,10 @@
 const popRawData = require('../createFakeData.js');
 
-
-const rawData = popRawData();
-console.log('rawData: ', rawData[0]);
-
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;  
 const csvWriter = createCsvWriter({  
   path: 'out.csv',
   header: [
+    {id: 'id', title: 'Id'},
     {id: 'price', title: 'Price'},
     {id: 'beds', title: 'Beds'},
     {id: 'baths', title: 'Baths'},

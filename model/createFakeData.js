@@ -1,9 +1,11 @@
 var faker = require('faker');
+var count = 1;
+
 var popRawData = function popRawData() {
   var rawData = [];
-  
-  for(var i = 0; i < 1000; i++) {
-    const obj = {};
+  // use
+  for(var i = 1; i <= 1000; i++) {
+    let obj = {};
     obj['price'] = faker.random.number({
       'min': 100000,
       'max': 5000000
@@ -23,6 +25,7 @@ var popRawData = function popRawData() {
     obj.address = faker.address.streetAddress()
     obj.latitude = faker.address.latitude()
     obj.longitude = faker.address.longitude()
+    obj.id = count++
     rawData.push(obj)
   }
  return rawData;
