@@ -1,6 +1,7 @@
 const sqlite3 = require('sqlite3').verbose();
 const pg = require('pg');
 
+// development
 const config = {
     user: 'postgres', //this is the db user credential
     database: 'rebuild',
@@ -9,6 +10,18 @@ const config = {
     max: 10, // max number of clients in the pool
     idleTimeoutMillis: 30000,
 };
+
+// production
+// const config = {
+//     user: 'postgres', //this is the db user credential
+//     host: 'ec2-18-206-39-171.compute-1.amazonaws.com',
+//     database: 'rebuild',
+//     password: 'root',
+//     port: 5432,
+//     max: 10, // max number of clients in the pool
+//     idleTimeoutMillis: 30000,
+// };
+
 
 const pool = new pg.Pool(config);
 
