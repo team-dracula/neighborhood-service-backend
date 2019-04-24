@@ -15,7 +15,7 @@ const pg = require('pg');
 // production
 const config = {
     user: 'postgres', //this is the db user credential
-    host: 'ec2-54-224-124-125.compute-1.amazonaws.com',
+    host: 'ec2-52-202-108-219.compute-1.amazonaws.com',
     database: 'zillow',
     password: 'postgres',
     port: 5432,
