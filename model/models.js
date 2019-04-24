@@ -2,25 +2,26 @@ const sqlite3 = require('sqlite3').verbose();
 const pg = require('pg');
 
 // development
-const config = {
-    user: 'postgres', //this is the db user credential
-    database: 'rebuild',
-    password: 'root',
-    port: 5432,
-    max: 10, // max number of clients in the pool
-    idleTimeoutMillis: 30000,
-};
-
-// production
 // const config = {
 //     user: 'postgres', //this is the db user credential
-//     host: 'ec2-18-206-39-171.compute-1.amazonaws.com',
 //     database: 'rebuild',
 //     password: 'root',
 //     port: 5432,
 //     max: 10, // max number of clients in the pool
 //     idleTimeoutMillis: 30000,
 // };
+// var awsDB = 'ec2-54-224-124-125.compute-1.amazonaws.com';
+
+// production
+const config = {
+    user: 'postgres', //this is the db user credential
+    host: 'ec2-54-224-124-125.compute-1.amazonaws.com',
+    database: 'zillow',
+    password: 'postgres',
+    port: 5432,
+    max: 10, // max number of clients in the pool
+    idleTimeoutMillis: 30000,
+};
 
 
 const pool = new pg.Pool(config);
@@ -63,7 +64,7 @@ var retrieveOne = (req, res) => {
 }
 
 var psqlRetrieveAll = (req, res) => {
-    var getEverything = 'SELECT * FROM neighborhood limit 100';
+    var getEverything = 'SELECT * FROM properties limit 100';
     
     pool.query(getEverything)
     .then((data) => {
@@ -77,7 +78,7 @@ var psqlRetrieveAll = (req, res) => {
 
 var psqlRetrieveOne = (req, res) => {
     
-    var getOne = 'SELECT * FROM neighborhood WHERE id = ' + req.params.id;
+    var getOne = 'SELECT * FROM properties WHERE id = ' + req.params.id;
 
     pool.query(getOne)
         .then((data) => {
