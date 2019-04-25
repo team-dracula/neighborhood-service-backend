@@ -16,7 +16,12 @@ class Map extends React.Component {
         this._onClick = this._onClick.bind(this);
         this._onBoundsChange = this._onBoundsChange.bind(this)
         this.zoom = 15;
-        
+
+        this.boundsChange = this.boundsChange.bind(this);
+    }
+
+    boundsChange(obj) {
+      console.log('obj: ', obj);
     }
 
     _onBoundsChange(obj) {
@@ -34,7 +39,8 @@ class Map extends React.Component {
         return (
           // Important! Always set the container height explicitly
           <div style={{ height: '50vh', width: '100%' }}>
-            <GoogleMapReact onChange={this._onBoundsChange} onClick={this._onClick} bootstrapURLKeys={{ key: config }} defaultCenter={this.center} center={{lat: this.props.currentProperty.latitude, lng: this.props.currentProperty.longitude}} defaultZoom={this.zoom} >
+
+            <GoogleMapReact onChange={this.boundsChange} bootstrapURLKeys={{ key: config }} defaultCenter={this.center} center={{lat: this.props.currentProperty.latitude, lng: this.props.currentProperty.longitude}} defaultZoom={this.zoom} >
             {this.props.properties.map( (property, i) => {
                 return (
                     <MapProperty key={i} lat={property.latitude} lng={property.longitude} property={property} currentProperty={this.props.currentProperty} changeCurrentProperty={this.props.changeCurrentProperty}/>
