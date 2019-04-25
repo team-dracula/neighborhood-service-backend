@@ -2,26 +2,26 @@ const sqlite3 = require('sqlite3').verbose();
 const pg = require('pg');
 
 // development
-// const config = {
-//     user: 'postgres', //this is the db user credential
-//     database: 'rebuild',
-//     password: 'root',
-//     port: 5432,
-//     max: 10, // max number of clients in the pool
-//     idleTimeoutMillis: 30000,
-// };
-// var awsDB = 'ec2-54-224-124-125.compute-1.amazonaws.com';
-
-// production
 const config = {
     user: 'postgres', //this is the db user credential
-    host: 'ec2-52-202-108-219.compute-1.amazonaws.com',
-    database: 'zillow',
-    password: 'postgres',
+    database: 'rebuild',
+    password: 'root',
     port: 5432,
     max: 10, // max number of clients in the pool
     idleTimeoutMillis: 30000,
 };
+var awsDB = 'ec2-54-224-124-125.compute-1.amazonaws.com';
+
+// production
+// const config = {
+//     user: 'postgres', //this is the db user credential
+//     host: 'ec2-52-202-108-219.compute-1.amazonaws.com',
+//     database: 'zillow',
+//     password: 'postgres',
+//     port: 5432,
+//     max: 10, // max number of clients in the pool
+//     idleTimeoutMillis: 30000,
+// };
 
 
 const pool = new pg.Pool(config);
@@ -30,41 +30,24 @@ pool.on('connect', () => {
   console.log('connected to the Database');
 });
 
-var retrieveAll = (req, res) => {
-    let db = new sqlite3.Database(__dirname + '/../properties.db', (err) => {
-    
-        if (err) {
-            console.log('error db', err);
-        } else {
-            db.all("SELECT * FROM regoProperties;", [], (err, rows) => {
-                if (err) {
-                    console.log(err);
-                } else {
-                    res.send(rows);
-                }
-            });
-        }
-    });    
+var psqlOnChange = (bounds) => {
+  var query = `SELECT * FROM neighborhood where (latitude > ${bounds.sw.lat} and latitude < ${bounds.se.lat}) and (longitude > ${bounds.sw.lng} and longitude < ${bounds.nw.lng}) limit 500 `;
+  
+  pool.query(query)
+  .then((data) => {
+    return (data.rows)
+  })
+  .catch((err) => {
+    console.log(err);
+    pool.end();
+  }); 
 }
 
-var retrieveOne = (req, res) => {
-    let db = new sqlite3.Database(__dirname + '/../properties.db', (err) => {
-        if (err) {
-            console.log('error db', err);
-        } else {
-            db.all("SELECT * FROM regoProperties WHERE uniqueId = " + req.params.id, [], (err, property) => {
-                if (err) {
-                    console.log(err);
-                } else {
-                    res.send(property);
-                }
-            })
-        }
-    })
-}
+
+
 
 var psqlRetrieveAll = (req, res) => {
-    var getEverything = 'SELECT * FROM properties limit 100';
+    var getEverything = 'SELECT * FROM neighborhood limit 100';
     
     pool.query(getEverything)
     .then((data) => {
@@ -78,7 +61,7 @@ var psqlRetrieveAll = (req, res) => {
 
 var psqlRetrieveOne = (req, res) => {
     
-    var getOne = 'SELECT * FROM properties WHERE id = ' + req.params.id;
+    var getOne = 'SELECT * FROM neighborhood WHERE id = ' + req.params.id;
 
     pool.query(getOne)
         .then((data) => {
@@ -102,10 +85,7 @@ var psqlRetrieveOne = (req, res) => {
     //     }
     // })
 }
-
-
-module.exports.retrieveAll = retrieveAll;
-module.exports.retrieveOne = retrieveOne;
+module.exports.psqlOnChange = psqlOnChange;
 module.exports.psqlRetrieveAll = psqlRetrieveAll;
 module.exports.psqlRetrieveOne = psqlRetrieveOne;
 module.exports.pool = pool;
