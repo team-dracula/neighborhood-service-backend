@@ -1,9 +1,8 @@
 import React from 'react';
+import axios from 'axios';
 import GoogleMapReact from 'google-map-react';
 import config from '../../config.js';
 import MapProperty from './mapProperty.jsx';
-
-
 
 class Map extends React.Component {
     constructor(props) {
@@ -14,7 +13,6 @@ class Map extends React.Component {
         }
 
         this._onClick = this._onClick.bind(this);
-        this._onBoundsChange = this._onBoundsChange.bind(this)
         this.zoom = 15;
 
         this.boundsChange = this.boundsChange.bind(this);
@@ -22,10 +20,13 @@ class Map extends React.Component {
 
     boundsChange(obj) {
       console.log('obj: ', obj);
-    }
-
-    _onBoundsChange(obj) {
-      console.log('obj', obj);
+      console.log('this.props.properties: ', this.props.properties);
+      axios.post('/mapChange', obj).then(response => {
+        console.log('response from mapChange: ', response)
+        console.log('this.props ', this.props)
+        this.props.handleOnChange(response.data)
+      });
+      
     }
 
     _onClick(obj) {

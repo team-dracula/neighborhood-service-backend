@@ -10,8 +10,7 @@ const config = {
     max: 10, // max number of clients in the pool
     idleTimeoutMillis: 30000,
 };
-
-var awsDB = 'ec2-54-224-124-125.compute-1.amazonaws.com';
+// var awsDB = 'ec2-54-224-124-125.compute-1.amazonaws.com';
 
 // production
 // const config = {
@@ -24,50 +23,27 @@ var awsDB = 'ec2-54-224-124-125.compute-1.amazonaws.com';
 //     idleTimeoutMillis: 30000,
 // };
 
+
 const pool = new pg.Pool(config);
 
 pool.on('connect', () => {
   console.log('connected to the Database');
 });
 
-var retrieveAll = (req, res) => {
-    let db = new sqlite3.Database(__dirname + '/../properties.db', (err) => {
-    
-        if (err) {
-            console.log('error db', err);
-        } else {
-            db.all("SELECT * FROM regoProperties;", [], (err, rows) => {
-                if (err) {
-                    console.log(err);
-                } else {
-                    res.send(rows);
-                }
-            });
-        }
-    });    
-}
-
-var retrieveOne = (req, res) => {
-    let db = new sqlite3.Database(__dirname + '/../properties.db', (err) => {
-        if (err) {
-            console.log('error db', err);
-        } else {
-            db.all("SELECT * FROM regoProperties WHERE uniqueId = " + req.params.id, [], (err, property) => {
-                if (err) {
-                    console.log(err);
-                } else {
-                    res.send(property);
-                }
-            })
-        }
-    })
-}
-var psqlOnChange = (bounds) => {
-  var query = `SELECT * FROM neighborhood where (latitude > ${bounds.sw.lat} and latitude < ${bounds.se.lat}) and (longitude > ${bounds.sw.lng} and longitude < ${bounds.nw.lng}) limit 500 `;
+var psqlOnChange = (req, res, bounds) => {
+  console.log('bounds: ', bounds);
+  console.log('bounds fixed ', bounds.se.lat);
+  console.log(`SELECT * FROM neighborhood where (latitude > ${(bounds.sw.lat).toFixed(4)} and latitude < ${(bounds.se.lat).toFixed(4) + 1}) and (longitude > ${(bounds.sw.lng).toFixed(4)} and longitude < ${(bounds.nw.lng).toFixed(4)}) limit 100 `);
+  var swLat = Math.floor((bounds.sw.lat).toFixed(4))
+  var seLat = (bounds.se.lat).toFixed(4) + 1.0000
+  var swLng = Math.floor((bounds.sw.lng).toFixed(4))
+  var seLng = (bounds.se.lng).toFixed(4) + 1.0000;
+  console.log(`SELECT * FROM neighborhood where (latitude > ${swLat} and latitude < ${seLat}) and (longitude > ${swLng} and longitude < ${seLng}) limit 100 `);
+  var query = `SELECT * FROM neighborhood where (latitude > ${swLat} and latitude < ${seLat}) and (longitude > ${swLng} and longitude < ${seLng}) limit 100 `;
   
   pool.query(query)
   .then((data) => {
-    return (data.rows)
+    res.send(data.rows)
   })
   .catch((err) => {
     console.log(err);
@@ -76,8 +52,7 @@ var psqlOnChange = (bounds) => {
 }
 
 var psqlRetrieveAll = (req, res) => {
-
-    var getEverything = 'SELECT * FROM neighborhood limit 100';
+    var getEverything = 'SELECT * FROM neighborhood limit 200';
     
     pool.query(getEverything)
     .then((data) => {
@@ -115,6 +90,7 @@ var psqlRetrieveOne = (req, res) => {
     //     }
     // })
 }
+
 
 // var psqlRetrieveAll = (req, res) => {
 //     var getEverything = 'SELECT * FROM properties limit 100';
