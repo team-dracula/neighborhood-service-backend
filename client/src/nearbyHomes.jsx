@@ -6,8 +6,8 @@ class NearbyHomes extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentFirstPicture: Math.round(Math.random() * 100),
-            currentSecondPicture: Math.round(Math.random() * 100),
+            currentFirstPicture: Math.round(Math.random() * this.props.properties.length),
+            currentSecondPicture: Math.round(Math.random() * this.props.properties.length),
         }
         this.slidePicsToRight = this.slidePicsToRight.bind(this);
         this.slidePicsToLeft = this.slidePicsToLeft.bind(this);
@@ -32,6 +32,8 @@ class NearbyHomes extends React.Component {
     }
 
     render() {
+        console.log('property: ', this.props.properties[0])
+        // debugger;
         return (
             <div id="nearbyHomesSectionContainer">
                 <h5>NEARBY HOMES</h5>
@@ -39,21 +41,21 @@ class NearbyHomes extends React.Component {
                     <button className="nearbyHomesPicsScroll" onClick={this.slidePicsToLeft}>{'<'}</button>
                     
                     <div className="nearbyHomesPicContainer">
-                        <img className="nearbyHomesPic" onClick={() => document.location.pathname = '/' + this.state.currentFirstPicture} src={this.props.properties[this.state.currentFirstPicture - 1].imgUrl}></img>
-                        <div className="nearbyHomesPicTextOverlayPhotos">{Math.round(Math.random()*10 + 2) + ' photos'}</div>
+                        <img className="nearbyHomesPic" onClick={() => document.location.pathname = '/' + this.state.currentFirstPicture} src={ this.props.properties[this.state.currentFirstPicture > this.props.properties.length ? 0 : this.state.currentFirstPicture - 1].imgurl}></img>
+                        <div className="nearbyHomesPicTextOverlayPhotos">{0 + ' photos'}</div>
                         <div className="nearbyHomesPicTextOverlayOnOffMarket">On Market</div>
-                        <div className="nearbyHomesPicTextOverlayPrice">{'$' + Math.round(this.props.properties[this.state.currentFirstPicture].price/1000) + 'K'}</div>
-                        <div className="nearbyHomesPicTextOverlayBeds">{this.props.properties[this.state.currentFirstPicture].beds + ' beds, ' + this.props.properties[this.state.currentFirstPicture].baths + ' baths, ' + this.props.properties[this.state.currentFirstPicture].sqft + ' sqft'}</div>
-                        <div className="nearbyHomesPicTextOverlayAddress">{this.props.properties[this.state.currentFirstPicture].address}</div>
+                        {/* <div className="nearbyHomesPicTextOverlayPrice">{'$' + Math.round(this.props.properties[this.state.currentFirstPicture].price/1000) + 'K'}</div> */}
+                        {/* <div className="nearbyHomesPicTextOverlayBeds">{this.props.properties[this.state.currentFirstPicture].beds + ' beds, ' + this.props.properties[this.state.currentFirstPicture].baths + ' baths, ' + this.props.properties[this.state.currentFirstPicture].sqft + ' sqft'}</div> */}
+                        {/* <div className="nearbyHomesPicTextOverlayAddress">{this.props.properties[this.state.currentFirstPicture].address}</div> */}
                     </div>
 
                     <div className="nearbyHomesPicContainer">
-                        <img className="nearbyHomesPic" onClick={() => document.location.pathname = '/' + this.state.currentSecondPicture} src={this.props.properties[this.state.currentSecondPicture - 1].imgUrl}></img>
-                        <div className="nearbyHomesPicTextOverlayPhotos">{Math.round(Math.random()*10 + 2) + ' photos'}</div>
+                        <img className="nearbyHomesPic" onClick={() => document.location.pathname = '/' + this.state.currentSecondPicture} src={this.props.properties[this.state.currentFirstPicture > this.props.properties.length ? 0 : this.state.currentFirstPicture - 1].imgurl}></img>
+                        <div className="nearbyHomesPicTextOverlayPhotos">{0 + ' photos'}</div>
                         <div className="nearbyHomesPicTextOverlayOnOffMarket">On Market</div>
-                        <div className="nearbyHomesPicTextOverlayPrice">{'$' + Math.round(this.props.properties[this.state.currentSecondPicture].price/1000) + 'K'}</div>
-                        <div className="nearbyHomesPicTextOverlayBeds">{this.props.properties[this.state.currentSecondPicture].beds + ' beds, ' + this.props.properties[this.state.currentSecondPicture].baths + ' baths, ' + this.props.properties[this.state.currentSecondPicture].sqft + ' sqft'}</div>
-                        <div className="nearbyHomesPicTextOverlayAddress">{this.props.properties[this.state.currentSecondPicture].address}</div>
+                        <div className="nearbyHomesPicTextOverlayPrice">{'$' + Math.round(this.props.properties[ this.state.currentSecondPicture > this.props.properties.length ? 0 : this.state.currentSecondPicture - 1].price/1000) + 'K'}</div>
+                        <div className="nearbyHomesPicTextOverlayBeds">{this.props.properties[this.state.currentSecondPicture > this.props.properties.length ? 0 : this.state.currentSecondPicture - 1].beds + ' beds, ' + this.props.properties[this.state.currentSecondPicture > this.props.properties.length ? 0 : this.state.currentSecondPicture - 1].baths + ' baths, ' + this.props.properties[this.state.currentSecondPicture > this.props.properties.length ? 0 : this.state.currentSecondPicture - 1].sqft + ' sqft'}</div>
+                        <div className="nearbyHomesPicTextOverlayAddress">{this.props.properties[this.state.currentSecondPicture > this.props.properties.length ? 0 : this.state.currentSecondPicture - 1].address}</div>
                     </div>
 
                     <button className="nearbyHomesPicsScroll" onClick={this.slidePicsToRight}>{'>'}</button>
